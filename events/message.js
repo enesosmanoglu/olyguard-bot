@@ -19,56 +19,62 @@ module.exports = async message => {
     const collector = message.channel.createMessageCollector(filter, { time: db.get(`spam.saniye_${message.guild.id}`)*1000, max: db.get(`spam.tekrar_${message.guild.id}`) - 1 }); // - 1 yapma sebebi ilk atılan mesaj toplayıcı başlatıyor kendini saymıyor
     collector.id = message.id;
 
-      if (!client.collectors) client.collectors = {}
+      if (!client.spamCollectors) client.spamCollectors = {}
 
-      client.collectors[collector.id] = collector
+      client.spamCollectors[collector.id] = collector
 
-    collector.on('collect', m => {
-      console.log(`Collected ${m.content}`) 
+    collector.on('collect', m => {                               
+      console.log(`SpamCollected ${m.content} (${collector.id})`) 
+      collector.checkEnd()
     });
     collector.on('end', collected => {
-      console.log(`Collected ${collected.size} items`)
-      if (collected.size >= collector.options.max) {
-
-          db.add(`${message.author.id}.spam.uyarı`, 1)
-            .then(()=>{
-              if (client.user.presence.status != "dnd") return; // Bundan sonrası aktif botun işi (test değilse kodu aktif et)
-            
-              message.delete()
-                .then(async ()=>{
-                  await collected.each(msg => msg.delete())
-                  await message.reply(`Lütfen spam yapmayınız! (Mevcut uyarı sayısı: ${db.get(`${message.author.id}.spam.uyarı`)})`)
-
-
-                  if (db.get(`${message.author.id}.spam.uyarı`) >= db.get(`spam.uyarı_${message.guild.id}`)) {
-                    // SPAM UYARI LİMİTİ AŞILMIŞ CEZA VAKTİ
-
-                    const olympos = client.users.cache.find(u => u.id == ayarlar.olympos.botID);
-                    if (!olympos) return console.error("OLYMPOS BOTUNU BULAMADIM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: "+message.author.id+")")
-
-                    olympos.send(ayarlar.olympos.prefix + "mute <@" + message.author.id + "> 10 [olyguard] Spam saptandı. Spam mesajı: _'" + message.content + "'_'")
-                      .catch(err => {
-                        olympos.send(ayarlar.olympos.prefix + "mute <@" + message.author.id + "> 10 [olyguard] Spam saptandı.")
-                          .catch(err => {
-                            console.error(err,"OLYMPOS BOTUNA MESAJ GÖNDEREMEDİM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: "+message.author.id+")")
-                          })
-                          .then(()=> {
-                            db.delete(`${message.author.id}.spam.uyarı`)
-                          })
-                      })
-                      .then(()=> {
-                        db.delete(`${message.author.id}.spam.uyarı`)
-                      })
-
-                  }        
-
-                  for (let [key, value] of Object.entries(client.collectors)) {
-                    value.stop("Spam saptandı.")
-                    console.log("Collector durduruldu: " + key)
-                  }
-                  delete client.collectors[collector.id];
-              })
+        delete client.spamCollectors[collector.id];
+      console.log(`SpamCollected ${collected.size} items (${collector.id})`)
+      if (collected.size >= collector.options.max) { // YETERİ KADAR SPAM MESAJI BULUNDU
+        for (let [key, value] of Object.entries(client.spamCollectors)) {
+          value.collected.clear()
+          value.stop("Spam saptandı.")
+          console.log("SpamCollector durduruldu: " + key)
+        }
+        
+        if (client.user.presence.status == "dnd") { // AKTİFSE YAP
+          message.delete()
+            .then(async ()=>{
+              await collected.each(msg => msg.delete())
+              await message.reply(`Lütfen spam yapmayınız! (Mevcut uyarı sayısı: ${db.get(`${message.author.id}.spam.uyarı`)})`)
           })
+        }
+
+        db.add(`${message.author.id}.spam.uyarı`, 1)
+        
+        
+        if (db.get(`${message.author.id}.spam.uyarı`) >= db.get(`spam.uyarı_${message.guild.id}`)) {
+          // SPAM UYARI LİMİTİ AŞILMIŞ CEZA VAKTİ
+          
+          if (client.user.presence.status != "dnd") return db.delete(`${message.author.id}.spam.uyarı`);
+          
+          const olympos = client.users.cache.find(u => u.id == ayarlar.olympos.botID);
+          if (!olympos) return console.error("OLYMPOS BOTUNU BULAMADIM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: "+message.author.id+")")
+
+          olympos.send(ayarlar.olympos.prefix + "mute <@" + message.author.id + "> 10 [olyguard] Spam saptandı. Spam mesajı: _'" + message.content + "'_'")
+            .catch(err => {
+              olympos.send(ayarlar.olympos.prefix + "mute <@" + message.author.id + "> 10 [olyguard] Spam saptandı.")
+                .catch(err => {
+                  console.error(err,"OLYMPOS BOTUNA MESAJ GÖNDEREMEDİM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: "+message.author.id+")")
+                })
+                .then(()=>{
+                  db.delete(`${message.author.id}.spam.uyarı`)
+                })
+            })
+            .then(()=>{
+              db.delete(`${message.author.id}.spam.uyarı`)
+            })
+        }        
+
+        
+
+        
+
           
         
           
@@ -81,26 +87,27 @@ module.exports = async message => {
     const collector = message.channel.createMessageCollector(filter, { time: db.get(`raid.saniye_${message.guild.id}`)*1000, max: db.get(`raid.kişi_${message.guild.id}`) - 1 }); // - 1 yapma sebebi ilk atılan mesaj toplayıcı başlatıyor kendini saymıyor
     collector.id = message.id;
 
-      if (!client.collectors) client.collectors = {}
+      if (!client.raidCollectors) client.raidCollectors = {}
 
-      client.collectors[collector.id] = collector
+      client.raidCollectors[collector.id] = collector
 
     collector.on('collect', m => {
-      console.log(`Collected ${m.content}`) 
+      console.log(`RaidCollected ${m.content}`) 
     });
     collector.on('end', collected => {
-      console.log(`Collected ${collected.size} items`)
+      console.log(`RaidCollected ${collected.size} items`)
       if (collected.size >= collector.options.max) {
+          for (let [key, value] of Object.entries(client.raidCollectors)) {
+            value.stop("Raid saptandı.")
+            console.log("RaidCollector durduruldu: " + key)
+          }
+          delete client.raidCollectors[collector.id];
+        
           if (client.user.presence.status != "dnd") return; // Bundan sonrası aktif botun işi (test değilse kodu aktif et)
 
           message.channel.updateOverwrite(message.guild.roles.everyone, {SEND_MESSAGES: false})
             .then(() => {
               message.channel.send(`Spam koruması nedeniyle kanal mesajlara kapatıldı ${message.guild.roles.cache.find(r => r.name == "Zeus")}`).catch(e=>{})
-              for (let [key, value] of Object.entries(client.collectors)) {
-                value.stop("Spam saptandı.")
-                console.log("Collector durduruldu: " + key)
-              }
-              delete client.collectors[collector.id];
           })
             .catch(err => {
             console.error(err.message)
