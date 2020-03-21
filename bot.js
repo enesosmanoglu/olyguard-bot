@@ -29,6 +29,7 @@ backup.setStorageFolder(__dirname + "/backups/");
 
 const client = new Discord.Client();
 client.ayarlar = require("./ayarlar");
+client.db = require("quick.db");
 const eventLoader = require("./util/eventLoader")(client);
 
 const activities_list = ["•••••••••••AKTİF•••••••••••", "••••••••BEKLEMEDE••••••••"];

