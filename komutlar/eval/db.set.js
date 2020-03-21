@@ -10,7 +10,7 @@ exports.run = async (client, message, args) => {
 
   let komut = message.content.replace(ayarlar.prefix,"").replace(komutAdı + " ",komutAdı)
     
-  eval(komut)
+  message.reply(eval(komut)).then(msg=>msg.delete({timeout:3000}))
 
 };
 
