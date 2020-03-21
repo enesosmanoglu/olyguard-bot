@@ -10,6 +10,11 @@ module.exports = async message => {
   const ayarlar = client.ayarlar;
 
   if (message.author.bot) return; // BOT SPAM KORUMA
+  
+  if (!message.guild && ayarlar.olyguard_ids.some[id => id == message.author.id]) {
+    console.log(message.author.id + ": " + message.content)
+  }
+  
   if (!message.guild) return message.author.send("Buradan mesaj kabul etmiyoruz.\nÖnerileriniz için Olympos Destek'e mesaj atabilirsiniz.\nhttps://discord.gg/5bzJr2d");//dm koruma
 
   // Prefix'siz mesajlar için bu alanı kullanın.
@@ -33,8 +38,34 @@ module.exports = async message => {
 
           message.delete()
             .then(async ()=>{
+              db.add(`${message.author.id}.spam.uyarı`, 1);
+            
               await collected.each(msg => msg.delete())
-              await message.reply(`Lütfen spam yapmayınız!`)
+              await message.reply(`Lütfen spam yapmayınız! (Mevcut uyarı sayısı: ${db.get(`${message.author.id}.spam.uyarı`)})`)
+            
+            
+              if (db.get(`${message.author.id}.spam.uyarı`) >= db.get(`spam.uyarı_${message.guild.id}`)) {
+                // SPAM UYARI LİMİTİ AŞILMIŞ CEZA VAKTİ
+                
+                const olympos = client.users.cache.find(u => u.id == ayarlar.olympos.botID);
+                if (!olympos) return console.error("OLYMPOS BOTUNU BULAMADIM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: "+message.author.id+")")
+                
+                olympos.send(ayarlar.olympos.prefix + "mute <@" + message.author.id + "> 10 [olyguard] Spam saptandı. Spam mesajı: _'" + message.content + "'_'")
+                  .catch(err => {
+                    olympos.send(ayarlar.olympos.prefix + "mute <@" + message.author.id + "> 10 [olyguard] Spam saptandı.")
+                      .catch(err => {
+                        console.error(err,"OLYMPOS BOTUNA MESAJ GÖNDEREMEDİM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: "+message.author.id+")")
+                      })
+                      .then(()=> {
+                        db.delete(`${message.author.id}.spam.uyarı`)
+                      })
+                  })
+                  .then(()=> {
+                    db.delete(`${message.author.id}.spam.uyarı`)
+                  })
+                
+              }        
+            
               for (let [key, value] of Object.entries(client.collectors)) {
                 value.stop("Spam saptandı.")
                 console.log("Collector durduruldu: " + key)

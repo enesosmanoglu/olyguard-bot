@@ -2,11 +2,12 @@ const Discord = require('discord.js');
 const db = require('quick.db');
 const komutAdı = __filename.replace(__dirname,"").replace("/","").replace(".js","")
 
+const anaKomut = komutAdı.split(".")[0];
+const ozellik = komutAdı.split(".")[1];
+
 exports.run = async (client, message, args) => {
     const ayarlar = client.ayarlar;
   
-    let anaKomut = komutAdı.split(".")[0];
-    let ozellik = komutAdı.split(".")[1];
 
     let varsayılanDeger = db.get(`${komutAdı}_${message.guild.id}`);
     let sayıMı = false;
@@ -47,6 +48,6 @@ exports.conf = {
 
 exports.help = {
     name: komutAdı,
-    description: `${komutAdı} özelliğini aç/kapat`,
+    description: `${anaKomut} için ${ozellik} özelliğini ayarla/görüntüle`,
     usage: `${komutAdı}`
 };

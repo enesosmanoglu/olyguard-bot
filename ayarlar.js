@@ -1,4 +1,8 @@
-exports.prefix = "og!"
+exports.prefix = ""
+exports.olympos = {
+    "botID" : "133191597683638273", // OLYMPOS: 689884874244358251
+    "prefix" : "o!",
+  }
 exports.sunucu = "667115809449050150",
 exports.perms = {
     "vipüstü" : ["Zeus", "POSEIDON", "Hera", "Hades", "Demeter", "Athena", "Kratos"],
@@ -9,13 +13,14 @@ exports.default = {
   "botengel": true,
   "kanalkoruma": true,
   "raid": true,
-  "raid.saniye": 10,
-  "raid.kişi": 10,
+  "raid.saniye": 10, // Kaç saniye içindeki mesajlar kontrol edilsin ?
+  "raid.kişi": 10, // Kaç farklı kişiden aynı mesaj tekrarında uyarı verilsin ?
   "reklambanayar" : true,
   "rolkoruma" : true,
   "spam": true,
-  "spam.saniye": 10,
-  "spam.tekrar": 3,
+  "spam.uyarı": 3, // Kaç uyarı sonrası ceza verilsin ?
+  "spam.saniye": 10, // Kaç saniye içindeki mesajlar kontrol edilsin ?
+  "spam.tekrar": 3, // Kaç aynı mesaj tekrarında uyarı verilsin ?
 }
 exports.olyguard_ids = [
   "690217618761711632",

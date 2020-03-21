@@ -36,6 +36,7 @@ const activities_list = ["•••••••••••AKTİF•••••
 client.on("ready", () => {
   const setStatus = require("./util/setStatus")(client);
   const setDefaults = require("./util/setDefaults")(client);
+  const dbSync = require("./util/dbSync")(client);
   console.log(`Aktif, ${client.commands.size} komut yüklendi!`);
   console.log(`${client.user.tag} giriş yaptı.`);
  
