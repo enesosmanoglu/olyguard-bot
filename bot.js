@@ -29,7 +29,6 @@ backup.setStorageFolder(__dirname + "/backups/");
 
 const client = new Discord.Client();
 client.ayarlar = require("./ayarlar");
-client.db = require("quick.db");
 const eventLoader = require("./util/eventLoader")(client);
 
 const activities_list = ["•••••••••••AKTİF•••••••••••", "••••••••BEKLEMEDE••••••••"];
@@ -65,13 +64,11 @@ client.on("ready", () => {
 
 client.setAvatar = function(url) { 
   if (db.get("lastAvatarURL") != url) {
-    client.setTimeout(()=>{
-      db.set("lastAvatarURL",url);
-      console.log("Avatar değiştiriliyor.")
-      client.user.setAvatar(url)
-        .then(user => console.log(`Avatar değiştirildi!`))
-        .catch(console.error);
-    }, 5000)
+    db.set("lastAvatarURL",url);
+    console.log("Avatar değiştiriliyor.")
+    client.user.setAvatar(url)
+      .then(user => console.log(`Avatar değiştirildi!`))
+      .catch(console.error);
   }
 }
 

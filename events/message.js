@@ -10,11 +10,6 @@ module.exports = async message => {
   const ayarlar = client.ayarlar;
 
   if (message.author.bot) return; // BOT SPAM KORUMA
-  
-  if (!message.guild && ayarlar.olyguard_ids.some[id => id == message.author.id]) {
-    console.log(message.author.id + ": " + message.content)
-  }
-  
   if (!message.guild) return message.author.send("Buradan mesaj kabul etmiyoruz.\nÖnerileriniz için Olympos Destek'e mesaj atabilirsiniz.\nhttps://discord.gg/5bzJr2d");//dm koruma
 
   // Prefix'siz mesajlar için bu alanı kullanın.
@@ -34,7 +29,7 @@ module.exports = async message => {
     collector.on('end', collected => {
       console.log(`Collected ${collected.size} items`)
       if (collected.size >= collector.options.max) {
-          if (client.user.presence.status != "dnd") return; // Bundan sonrası aktif botun işi (test değilse kodu aktif et)
+          //if (client.user.presence.status != "dnd") return; // Bundan sonrası aktif botun işi (test değilse kodu aktif et)
 
           message.delete()
             .then(async ()=>{
