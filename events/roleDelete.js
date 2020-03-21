@@ -16,12 +16,15 @@ module.exports = async role => {
     let perms = role.permissions;
     let position = role.position;
     role.guild.roles.create({
+      data: {
         name: name,
         color: color,
         hoist: hoist,
         position: position,
         permissions: perms,
         mentionable: mention
+      },
+      reason: 'Rol Koruma ^^',
     });
   }
   
