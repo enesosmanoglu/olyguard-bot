@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
 const db = require('quick.db');
-const komutAdı = __filename.replace(__dirname,"").replace("/","").replace(".js","")
+const komutAdı = __filename.replace(__dirname,"").replace("/","").replace(".js","");
+const ayarlar = require("/app/ayarlar");
 
 exports.run = async (client, message, args) => {
-    const ayarlar = client.ayarlar;
 
     let durum = true;
     if (args[0] == "aç")
@@ -24,7 +24,7 @@ exports.conf = {
     enabled: true,
     guildOnly: true,
     aliases: [],
-    perms: ["Zeus", "Athena"] // => Yetkisiz komut: @everyone
+    perms: ayarlar.perms.üst // => Yetkisiz komut: @everyone
 };
 
 exports.help = {

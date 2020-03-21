@@ -29,44 +29,47 @@ module.exports = async message => {
     collector.on('end', collected => {
       console.log(`Collected ${collected.size} items`)
       if (collected.size >= collector.options.max) {
-          if (client.user.presence.status != "dnd") return; // Bundan sonrası aktif botun işi (test değilse kodu aktif et)
 
-          message.delete()
-            .then(async ()=>{
-              db.add(`${message.author.id}.spam.uyarı`, 1);
+          db.add(`${message.author.id}.spam.uyarı`, 1)
+            .then(()=>{
+              if (client.user.presence.status != "dnd") return; // Bundan sonrası aktif botun işi (test değilse kodu aktif et)
             
-              await collected.each(msg => msg.delete())
-              await message.reply(`Lütfen spam yapmayınız! (Mevcut uyarı sayısı: ${db.get(`${message.author.id}.spam.uyarı`)})`)
-            
-            
-              if (db.get(`${message.author.id}.spam.uyarı`) >= db.get(`spam.uyarı_${message.guild.id}`)) {
-                // SPAM UYARI LİMİTİ AŞILMIŞ CEZA VAKTİ
-                
-                const olympos = client.users.cache.find(u => u.id == ayarlar.olympos.botID);
-                if (!olympos) return console.error("OLYMPOS BOTUNU BULAMADIM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: "+message.author.id+")")
-                
-                olympos.send(ayarlar.olympos.prefix + "mute <@" + message.author.id + "> 10 [olyguard] Spam saptandı. Spam mesajı: _'" + message.content + "'_'")
-                  .catch(err => {
-                    olympos.send(ayarlar.olympos.prefix + "mute <@" + message.author.id + "> 10 [olyguard] Spam saptandı.")
+              message.delete()
+                .then(async ()=>{
+                  await collected.each(msg => msg.delete())
+                  await message.reply(`Lütfen spam yapmayınız! (Mevcut uyarı sayısı: ${db.get(`${message.author.id}.spam.uyarı`)})`)
+
+
+                  if (db.get(`${message.author.id}.spam.uyarı`) >= db.get(`spam.uyarı_${message.guild.id}`)) {
+                    // SPAM UYARI LİMİTİ AŞILMIŞ CEZA VAKTİ
+
+                    const olympos = client.users.cache.find(u => u.id == ayarlar.olympos.botID);
+                    if (!olympos) return console.error("OLYMPOS BOTUNU BULAMADIM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: "+message.author.id+")")
+
+                    olympos.send(ayarlar.olympos.prefix + "mute <@" + message.author.id + "> 10 [olyguard] Spam saptandı. Spam mesajı: _'" + message.content + "'_'")
                       .catch(err => {
-                        console.error(err,"OLYMPOS BOTUNA MESAJ GÖNDEREMEDİM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: "+message.author.id+")")
+                        olympos.send(ayarlar.olympos.prefix + "mute <@" + message.author.id + "> 10 [olyguard] Spam saptandı.")
+                          .catch(err => {
+                            console.error(err,"OLYMPOS BOTUNA MESAJ GÖNDEREMEDİM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: "+message.author.id+")")
+                          })
+                          .then(()=> {
+                            db.delete(`${message.author.id}.spam.uyarı`)
+                          })
                       })
                       .then(()=> {
                         db.delete(`${message.author.id}.spam.uyarı`)
                       })
-                  })
-                  .then(()=> {
-                    db.delete(`${message.author.id}.spam.uyarı`)
-                  })
-                
-              }        
-            
-              for (let [key, value] of Object.entries(client.collectors)) {
-                value.stop("Spam saptandı.")
-                console.log("Collector durduruldu: " + key)
-              }
-              delete client.collectors[collector.id];
+
+                  }        
+
+                  for (let [key, value] of Object.entries(client.collectors)) {
+                    value.stop("Spam saptandı.")
+                    console.log("Collector durduruldu: " + key)
+                  }
+                  delete client.collectors[collector.id];
+              })
           })
+          
         
           
         }

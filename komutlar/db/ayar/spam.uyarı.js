@@ -1,13 +1,12 @@
 const Discord = require('discord.js');
 const db = require('quick.db');
 const komutAdı = __filename.replace(__dirname,"").replace("/","").replace(".js","")
+const ayarlar = require("/app/ayarlar");
 
 const anaKomut = komutAdı.split(".")[0];
 const ozellik = komutAdı.split(".")[1];
 
 exports.run = async (client, message, args) => {
-    const ayarlar = client.ayarlar;
-  
 
     let varsayılanDeger = db.get(`${komutAdı}_${message.guild.id}`);
     let sayıMı = false;
@@ -43,7 +42,7 @@ exports.conf = {
     enabled: true,
     guildOnly: true,
     aliases: [],
-    perms: ["Zeus", "Athena"] // => Yetkisiz komut: @everyone
+    perms: ayarlar.perms.üst // => Yetkisiz komut: @everyone
 };
 
 exports.help = {
