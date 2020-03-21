@@ -9,12 +9,13 @@ module.exports = async role => {
   
   /* ROL SİLME KORUMA */
   if (db.get("rolkoruma_" + role.guild.id) && (client.user.presence.status == "dnd")) { 
+    console.log(role)
     let mention = role.mentionable;
     let hoist = role.hoist;
     let color = role.hexColor;
     let name = role.name;
     let perms = role.permissions;
-    let position = role.position;
+    let position = role.rawPosition;
     role.guild.roles.create({
       data: {
         name: name,
@@ -25,7 +26,7 @@ module.exports = async role => {
         mentionable: mention
       },
       reason: 'Rol Koruma ^^',
-    });
+    })
   }
   
   /* ROL SİLME UYARI */
