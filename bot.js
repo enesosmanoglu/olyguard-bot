@@ -64,11 +64,13 @@ client.on("ready", () => {
 
 client.setAvatar = function(url) { 
   if (db.get("lastAvatarURL") != url) {
-    db.set("lastAvatarURL",url);
-    console.log("Avatar değiştiriliyor.")
-    client.user.setAvatar(url)
-      .then(user => console.log(`Avatar değiştirildi!`))
-      .catch(console.error);
+    client.setTimeout(()=>{
+      db.set("lastAvatarURL",url);
+      console.log("Avatar değiştiriliyor.")
+      client.user.setAvatar(url)
+        .then(user => console.log(`Avatar değiştirildi!`))
+        .catch(console.error);
+    }, 5000)
   }
 }
 

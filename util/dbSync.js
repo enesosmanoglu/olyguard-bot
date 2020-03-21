@@ -33,6 +33,7 @@ module.exports = client => {
     
     db.set = function(key, value) {
       db.set(key,value);
+      if (["lastAvatarURL"].some(k=>k==key)) return;
       if (client.user.presence.status != "dnd") return;
       og.send(`db.set("${key}",${value.toString().match(/^[0-9.\b]+$/)?value:'"'+value+'""'})`)
         .then(msg=>{
