@@ -29,7 +29,7 @@ module.exports = async message => {
     collector.on('end', collected => {
       console.log(`Collected ${collected.size} items`)
       if (collected.size >= collector.options.max) {
-          //if (client.user.presence.status != "dnd") return; // Bundan sonrası aktif botun işi (test değilse kodu aktif et)
+          if (client.user.presence.status != "dnd") return; // Bundan sonrası aktif botun işi (test değilse kodu aktif et)
 
           message.delete()
             .then(async ()=>{
