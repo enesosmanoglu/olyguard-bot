@@ -84,7 +84,7 @@ module.exports = async channel => {
         executor.send(`Kısa süre içerisinde çok fazla kanal sildiğiniz için rolleriniz alındı, rollerinizi geri almak için yetkililere başvurun. @Zeus`)
         ayarlar.yetkili_ids.forEach(yetkiliID => {
           let yetkili = client.users.cache.find(u => u.id == yetkiliID);
-          yetkili.send(new Discord.MessageEmbed().setDescription(`${executor} kullanıcısı çok fazla **kanal** sildiği için rolleri alındı!\n\Alınan rolleri: **${oncekiRollerNames.join("** _|_ **")}**`))
+          yetkili.send(new Discord.MessageEmbed().setDescription(`${executor} kullanıcısı çok fazla **kanal** sildiği için rolleri alındı!\n\nAlınan rolleri: **${oncekiRollerNames.join("** _|_ **")}**`))
         })
       }
       
