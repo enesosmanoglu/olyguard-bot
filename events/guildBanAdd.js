@@ -15,6 +15,7 @@ module.exports = async (guild, user) => {
   if (db.get(`ban_${guild.id}`) ) { 
     let banDakika = db.get(`ban.dakika_${guild.id}`);
     const denetimKaydı = await guild.fetchAuditLogs({
+      user: user,
       limit: 1,
       type: 'MEMBER_BAN_ADD',
     });

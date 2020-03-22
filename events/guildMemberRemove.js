@@ -17,6 +17,7 @@ module.exports = async member => {
   if (db.get(`kick_${member.guild.id}`) ) { 
     let kickDakika = db.get(`kick.dakika_${member.guild.id}`);
     const denetimKaydı = await member.guild.fetchAuditLogs({
+      user: member,
       limit: 1,
       type: 'MEMBER_KICK',
     });
