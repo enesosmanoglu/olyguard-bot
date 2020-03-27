@@ -1,9 +1,9 @@
 exports.prefix = "og!"
-exports.sunucu = "667115809449050150", // OLYMPOS: 606027252362379294 // TEST: 667115809449050150
+exports.sunucu = "692780558211874876", // OLYMPOS: 606027252362379294 // TEST: 667115809449050150
   
 exports.yetkili_ids = [
   //"208196116078919680", // jamie
-  "133191597683638273", // ria
+  "133191597683638273", // ria 
 ]
 
 exports.olympos = { // BOTID => Mute cezası için DM atılacak hesap id

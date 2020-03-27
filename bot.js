@@ -8,7 +8,7 @@ app.get("/", (request, response) => {
 app.listen(process.env.PORT);
 setInterval(() => {
   http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-}, 10000); 
+}, 10000);
 
 //////////////////////////////////////////////////////////////////////
 
@@ -39,7 +39,7 @@ client.on("ready", () => {
   const dbSync = require("./util/dbSync")(client);
   console.log(`Aktif, ${client.commands.size} komut yüklendi!`);
   console.log(`${client.user.tag} giriş yaptı.`);
- 
+
   /*
   let i = 0;
   setInterval(() => {
@@ -49,34 +49,37 @@ client.on("ready", () => {
   }, 5000);
   */
   setInterval(() => {
-    if (client.user.presence.status == "dnd")
-      {
-        client.user.setActivity(activities_list[0]);
-        client.setAvatar("/app/assets/on.png")
-      }
-    else if (client.user.presence.status == "idle")
-      {
-        client.user.setActivity(activities_list[1]);
-        client.setAvatar("/app/assets/off.png")
-      }
+    if (client.user.presence.status == "dnd") {
+      client.user.setActivity(activities_list[0]);
+      client.setAvatar("/app/assets/on.png")
+    }
+    else if (client.user.presence.status == "idle") {
+      client.user.setActivity(activities_list[1]);
+      client.setAvatar("/app/assets/off.png")
+    }
   }, 1000);
 });
 
-client.setAvatar = function(url) { 
-  if (db.get("lastAvatarURL") != url) {
-    db.set("lastAvatarURL",url);
-    console.log("Avatar değiştiriliyor.")
-    client.user.setAvatar(url)
-      .then(user => console.log(`Avatar değiştirildi!`))
-      .catch(console.error);
-  }
+client.lastAvatarURL = "";
+client.setAvatar = function (url) {
+  client.lastAvatarURL = url;
 }
+
+let changeAvatar = setInterval(() => {
+  if (db.get("lastAvatarURL") != client.lastAvatarURL) {
+    db.set("lastAvatarURL", client.lastAvatarURL);
+    console.log("Avatar değiştiriliyor.")
+    client.user.setAvatar(client.lastAvatarURL)
+      .then(user => console.log(`Avatar değiştirildi!`))
+      .catch(err => console.error(`Avatar değiştirilemedi! (${err.message})`));
+  }
+}, 5000);
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 
 let komutlar = [];
-let getCommands = function(path) {
+let getCommands = function (path) {
   fs.readdir(path, (err, files) => {
     if (err) console.error(err);
     files.forEach(f => {
@@ -99,7 +102,7 @@ let getCommands = function(path) {
       }
     });
   });
-}; 
+};
 
 getCommands("./komutlar/");
 
@@ -125,7 +128,7 @@ Sunucuya bot eklendi ve güvenlik nedeniyle banlandı: **${member.user.tag}**
     member.ban(member);
   }
 });
- 
+
 var hataKontrol = /[\w\d]{24}\.[\w\d]{6}\.[\w\d-_]{27}/g;
 
 client.on("disconnect", e => {

@@ -45,6 +45,7 @@ Sunucuya bot eklendi ve güvenlik nedeniyle banlandı: **${member.user.tag}**
         console.log(err.message);
       });
   }
+  ///////////////////////////////////////////////////////////
 
   if (client.user.presence.status != "dnd") return; // Buranın altını sadece aktif bot yükler.
 };
