@@ -1,13 +1,13 @@
 exports.prefix = "og!"
-exports.sunucu = "692780558211874876", // OLYMPOS: 606027252362379294 // TEST: 667115809449050150
+exports.sunucu = "667115809449050150", // OLYMPOS: 606027252362379294 // TEST: 667115809449050150
   
 exports.yetkili_ids = [
-  //"208196116078919680", // jamie
+  "208196116078919680", // jamie
   "133191597683638273", // ria 
 ]
 
 exports.olympos = { // BOTID => Mute cezası için DM atılacak hesap id
-    "botID" : "133191597683638273", // OLYMPOS BOT: 689884874244358251 // RIA: 133191597683638273
+    "botID" : "687364362901782554", // OLYMPOS BOT: 689884874244358251 // RIA: 133191597683638273 // OLYMPOS V2: 687364362901782554
     "prefix" : "o!",
 }
 exports.olyguard_ids = [
@@ -32,7 +32,7 @@ exports.yetkili_roller = [
 ]
   
 exports.perms = { // KOMUT YETKİLİLERİ İÇİN HAZIR AYARLAR
-    "üst": ["Zeus", "Demeter"],
+    "üst": ["Zeus", "POSEIDON", "Hera"],
     "vipüstü" : ["Zeus", "POSEIDON", "Hera", "Hades", "Demeter", "Athena", "Kratos"],
     "kayıtlı" : ["Apollo", "Artemis"],
     "herkes" : ["@everyone"]

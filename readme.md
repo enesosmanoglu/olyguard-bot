@@ -1,7 +1,6 @@
 # ✧ OLYGUARD
 
-Resmi [**✧ OLYMPOS**](https://discord.gg/5bzJr2d) Discord sunucusu için hazırlanmış güvenlik botudur.
+[**✧ OLYMPOS**](https://www.olymposweb.com) [Discord sunucusu](https://discord.gg/5bzJr2d) için hazırlanmış güvenlik botudur.
 
 
-
--ria
+-[ria](https://www.olymposweb.com/yetkililer/ria) 

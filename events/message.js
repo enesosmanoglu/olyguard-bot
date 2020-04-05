@@ -75,33 +75,25 @@ module.exports = async message => {
           if (!olympos)
             return console.error(
               "OLYMPOS BOTUNU BULAMADIM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: " +
-                message.author.id +
-                ")"
+              message.author.id +
+              ")"
             );
 
           olympos
             .send(
-              ayarlar.olympos.prefix +
-                "mute <@" +
-                message.author.id +
-                "> 10 [olyguard] Spam saptandı. Spam mesajı: _'" +
-                message.content +
-                "'_'"
+              ayarlar.olympos.prefix + "mute " + message.author.id + " 10 [olyguard] Spam saptandı. Spam mesajı: _'" + message.content + "'_'"
             )
             .catch(err => {
               olympos
                 .send(
-                  ayarlar.olympos.prefix +
-                    "mute <@" +
-                    message.author.id +
-                    "> 10 [olyguard] Spam saptandı."
+                  ayarlar.olympos.prefix + "mute " + message.author.id + " 10 [olyguard] Spam saptandı."
                 )
                 .catch(err => {
                   console.error(
                     err,
                     "OLYMPOS BOTUNA MESAJ GÖNDEREMEDİM :(\nSpam cezası kesilemedi. (Spam yapan kullanıcı id'si: " +
-                      message.author.id +
-                      ")"
+                    message.author.id +
+                    ")"
                   );
                 })
                 .then(() => {
@@ -154,7 +146,7 @@ module.exports = async message => {
                     r => r.name == "Zeus"
                   )}`
                 )
-                .catch(e => {});
+                .catch(e => { });
             })
             .catch(err => {
               console.error(err.message);
