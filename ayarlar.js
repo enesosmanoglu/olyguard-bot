@@ -7,7 +7,7 @@ exports.yetkili_ids = [
 ]
 
 exports.olympos = { // BOTID => Mute cezası için DM atılacak hesap id
-    "botID" : "687364362901782554", // OLYMPOS BOT: 689884874244358251 // RIA: 133191597683638273 // OLYMPOS V2: 687364362901782554
+    "botID" : "133191597683638273", // OLYMPOS BOT: 689884874244358251 // RIA: 133191597683638273 // OLYMPOS V2: 687364362901782554
     "prefix" : "o!",
 }
 exports.olyguard_ids = [

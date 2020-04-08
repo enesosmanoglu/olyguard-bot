@@ -1,8 +1,14 @@
+console.log("\n ".repeat(12))
+console.log("~".repeat(50))
+console.log(process.env.PROJECT_DOMAIN + " başlatılıyor. Lütfen bekleyiniz...")
+console.log("~".repeat(50))
+
+
 const express = require("express");
 const app = express();
 const http = require("http");
 app.get("/", (request, response) => {
-  //console.log(`¨`);
+  console.log(`¨`);
   response.sendStatus(200);
 });
 app.listen(process.env.PORT);
@@ -48,32 +54,46 @@ client.on("ready", () => {
     else i++;
   }, 5000);
   */
+
+  client.lastAvatarURL = "";
+  client.setAvatar = function (url) {
+    //console.log("setAvatar: " + url)
+    client.lastAvatarURL = url;
+  }
+  const changeAvatar = () => {
+    if (db.get("lastAvatarURL") != client.lastAvatarURL) {
+      console.log("Avatar değiştiriliyor.")
+      client.user.setAvatar(client.lastAvatarURL)
+        .then(async user => {
+          await db.set("lastAvatarURL", client.lastAvatarURL);
+          await console.log(`Avatar değiştirildi!`)
+        })
+        .catch(err => console.error(`Avatar değiştirilemedi! (${err.message})`));
+    }
+  }
   setInterval(() => {
     if (client.user.presence.status == "dnd") {
-      client.user.setActivity(activities_list[0]);
+      let activityInt = 0;
+      if (!client.user.presence.activities[0] || !client.user.presence.activities[0].name || client.user.presence.activities[0].name != activities_list[activityInt]) {
+        client.user.setActivity(activities_list[activityInt]);
+        client.clearInterval(client.changeAvatar)
+        client.changeAvatar = setInterval(() => changeAvatar(), 10000);
+      }
       client.setAvatar("/app/assets/on.png")
     }
     else if (client.user.presence.status == "idle") {
-      client.user.setActivity(activities_list[1]);
+      let activityInt = 1;
+      if (!client.user.presence.activities[0] || !client.user.presence.activities[0].name || client.user.presence.activities[0].name != activities_list[activityInt]) {
+        client.user.setActivity(activities_list[activityInt]);
+        client.clearInterval(client.changeAvatar)
+        client.changeAvatar = setInterval(() => changeAvatar(), 10000);
+      }
       client.setAvatar("/app/assets/off.png")
     }
-  }, 1000);
+  }, 500);
 });
 
-client.lastAvatarURL = "";
-client.setAvatar = function (url) {
-  client.lastAvatarURL = url;
-}
 
-let changeAvatar = setInterval(() => {
-  if (db.get("lastAvatarURL") != client.lastAvatarURL) {
-    db.set("lastAvatarURL", client.lastAvatarURL);
-    console.log("Avatar değiştiriliyor.")
-    client.user.setAvatar(client.lastAvatarURL)
-      .then(user => console.log(`Avatar değiştirildi!`))
-      .catch(err => console.error(`Avatar değiştirilemedi! (${err.message})`));
-  }
-}, 5000);
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
@@ -108,26 +128,6 @@ getCommands("./komutlar/");
 
 client.on("error", e => client.destroy());
 
-client.on("guildMemberAdd", member => {
-  if (!db.get("botengel_" + member.guild.id)) return;
-
-  const guild = member.guild;
-
-  let sChannel = member.guild.channels.cache.find(c => c.name === "bot-engel");
-
-  if (member.user.bot !== true) {
-  } else {
-    sChannel
-      .send(
-        `**OLYMPOS BOT ENGEL**
-Sunucuya bot eklendi ve güvenlik nedeniyle banlandı: **${member.user.tag}**
-@everyone`
-      )
-      .then(() => console.log(`yasaklandı ${member.displayName}`))
-      .catch(console.error);
-    member.ban(member);
-  }
-});
 
 var hataKontrol = /[\w\d]{24}\.[\w\d]{6}\.[\w\d-_]{27}/g;
 

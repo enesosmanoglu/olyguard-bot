@@ -11,19 +11,12 @@ module.exports = member => {
   }
 
   // BOT ENGEL
-  if (
-    !(db.has("botengel_" + member.guild.id)
-      ? !db.get("botengel_" + member.guild.id)
-      : !ayarlar.default.botengel) &&
-    member.user.bot
-  ) {
+  if ((db.has("botengel_" + member.guild.id) ? db.get("botengel_" + member.guild.id) : ayarlar.default.botengel) && member.user.bot) {
     const guild = member.guild;
 
-    let sChannel = member.guild.channels.cache.find(
-      c => c.name === "bot-engel"
-    );
-    if (!sChannel) {
-      sChannel = member.guild.channels.cache.first();
+    let sChannel = member.guild.channels.cache.find(c => c.name === "bot-engel");
+    if (!sChannel) { 
+      sChannel = member.guild.channels.cache.first(); 
     }
     if (!sChannel) {
       return console.log("Kanalsız sunucuya da bot girsin bi zahmet..");
@@ -33,8 +26,7 @@ module.exports = member => {
       .ban(member)
       .then(() => {
         sChannel
-          .send(
-            `**OLYMPOS BOT ENGEL**
+          .send(`**OLYMPOS BOT ENGEL**
 Sunucuya bot eklendi ve güvenlik nedeniyle banlandı: **${member.user.tag}**
 @everyone`
           )
