@@ -17,8 +17,8 @@ module.exports = async member => {
   if (db.get(`kick_${member.guild.id}`) ) { 
     let kickDakika = db.get(`kick.dakika_${member.guild.id}`);
     const denetimKaydı = await member.guild.fetchAuditLogs({
-      user: member,
-      limit: 1,
+      user: member.user,
+      limit: 10,
       type: 'MEMBER_KICK',
     });
     const sonKayıt = denetimKaydı.entries.first();
@@ -26,13 +26,13 @@ module.exports = async member => {
 
     const { executor, target } = sonKayıt;
 
-    console.log(member.user.tag + " kişisini atan kişi yakalandı: " + executor.tag)
+    console.log(member.user.tag + " kişisini atan kişi yakalandı: " + target.tag)
     
     let currentLog = {moment:parseInt(moment().format("x")),üye:member};
     
     let logCounts = 0;
     // 
-    db.push(`${executor.id}.kick.log`,currentLog).kick.log.forEach(log => {
+    db.push(`${target.id}.kick.log`,currentLog).kick.log.forEach(log => {
       let mom = log.moment + (kickDakika*60*1000)
       let üye = log.üye
   
@@ -49,7 +49,7 @@ module.exports = async member => {
       
         let oncekiRoller = [];
 
-        let atanMember = member.guild.member(executor);
+        let atanMember = member.guild.member(target);
         
         atanMember.roles.cache.filter(a => ayarlar.yetkili_roller.some(r=>r==a.name)).forEach(role => {
           oncekiRoller.push(role);
@@ -62,10 +62,10 @@ module.exports = async member => {
           oncekiRollerNames.push(rol.name)
         })
       
-        executor.send(`Kısa süre içerisinde çok fazla üye kicklediğiniz için rolleriniz alındı, rollerinizi geri almak için yetkililere başvurun. @Zeus`)
+        target.send(`Kısa süre içerisinde çok fazla üye kicklediğiniz için rolleriniz alındı, rollerinizi geri almak için yetkililere başvurun. @Zeus`)
         ayarlar.yetkili_ids.forEach(yetkiliID => {
           let yetkili = client.users.cache.find(u => u.id == yetkiliID);
-          yetkili.send(new Discord.MessageEmbed().setDescription(`${executor} kullanıcısı çok fazla üye **kick**lediği için rolleri alındı!\n\nAlınan rolleri: **${oncekiRollerNames.join("** _|_ **")}**`))
+          yetkili.send(new Discord.MessageEmbed().setDescription(`${target} kullanıcısı çok fazla üye **kick**lediği için rolleri alındı!\n\nAlınan rolleri: **${oncekiRollerNames.join("** _|_ **")}**`))
         })
       }
       

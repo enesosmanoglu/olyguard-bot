@@ -60,33 +60,47 @@ client.on("ready", () => {
     //console.log("setAvatar: " + url)
     client.lastAvatarURL = url;
   }
-  const changeAvatar = () => {
-    if (db.get("lastAvatarURL") != client.lastAvatarURL) {
-      console.log("Avatar değiştiriliyor.")
+  client.changeAvatar = () => {
+    let currentAvatarURL = client.user.displayAvatarURL();
+    let currentAvatarID = currentAvatarURL.split("/")[currentAvatarURL.split("/").length - 1].split(".")[0];
+    //console.log(currentAvatarID, client.lastAvatarURL)
+
+    if ((client.lastAvatarURL == "/app/assets/on.png" && currentAvatarID != "20fdbb3f72299197fa7f6879f2e4b590") || (client.lastAvatarURL == "/app/assets/off.png" && currentAvatarID != "fce8cae01305cbb91b3cce5f81a1e855"))
       client.user.setAvatar(client.lastAvatarURL)
-        .then(async user => {
-          await db.set("lastAvatarURL", client.lastAvatarURL);
-          await console.log(`Avatar değiştirildi!`)
-        })
+        .then(user => { console.log(`Avatar değiştirildi!`) })
         .catch(err => console.error(`Avatar değiştirilemedi! (${err.message})`));
-    }
+
+    // if (db.get("lastAvatarURL") != client.lastAvatarURL) {
+    //   console.log("Avatar değiştiriliyor.")
+    //   let interval = setInterval(() => {
+    //     client.user.setAvatar(client.lastAvatarURL)
+    //       .then(async user => {
+    //         clearInterval(interval)
+    //         await db.set("lastAvatarURL", client.lastAvatarURL);
+    //         await console.log(`Avatar değiştirildi!`)
+    //       })
+    //       .catch(err => console.error(`Avatar değiştirilemedi! (${err.message})`));
+    //   }, 5000);
+    // }
   }
+  // setInterval(() => {
+  //   changeAvatar()
+  // }, 5000);
   setInterval(() => {
     if (client.user.presence.status == "dnd") {
       let activityInt = 0;
       if (!client.user.presence.activities[0] || !client.user.presence.activities[0].name || client.user.presence.activities[0].name != activities_list[activityInt]) {
         client.user.setActivity(activities_list[activityInt]);
-        client.clearInterval(client.changeAvatar)
-        client.changeAvatar = setInterval(() => changeAvatar(), 10000);
+        client.clearInterval(client.changeAvatarInt)
+        client.changeAvatarInt = setInterval(() => client.changeAvatar(), 3000);
       }
       client.setAvatar("/app/assets/on.png")
-    }
-    else if (client.user.presence.status == "idle") {
+    } else if (client.user.presence.status == "idle") {
       let activityInt = 1;
       if (!client.user.presence.activities[0] || !client.user.presence.activities[0].name || client.user.presence.activities[0].name != activities_list[activityInt]) {
         client.user.setActivity(activities_list[activityInt]);
-        client.clearInterval(client.changeAvatar)
-        client.changeAvatar = setInterval(() => changeAvatar(), 10000);
+        client.clearInterval(client.changeAvatarInt)
+        client.changeAvatarInt = setInterval(() => client.changeAvatar(), 3000);
       }
       client.setAvatar("/app/assets/off.png")
     }
