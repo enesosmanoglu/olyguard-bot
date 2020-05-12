@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
-module.exports = member => {
+module.exports = (member = new Discord.GuildMember()) => {
   const client = member.client;
-  const ayarlar = client.ayarlar;
+  const ayarlar = client.settings;
 
   if (ayarlar.olyguard_ids.some(id => id == member.id)) {
     // Olyguard botu giriş yaptı.
@@ -15,8 +15,8 @@ module.exports = member => {
     const guild = member.guild;
 
     let sChannel = member.guild.channels.cache.find(c => c.name === "bot-engel");
-    if (!sChannel) { 
-      sChannel = member.guild.channels.cache.first(); 
+    if (!sChannel) {
+      sChannel = member.guild.channels.cache.first();
     }
     if (!sChannel) {
       return console.log("Kanalsız sunucuya da bot girsin bi zahmet..");

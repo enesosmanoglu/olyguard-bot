@@ -1,9 +1,9 @@
 dependencies:
-  discord-backup: 2.1.13
   discord.js: 12.1.1
   express: 4.17.1
   moment: 2.24.0
   quick.db: 7.0.0-b22
+  stack: 0.1.0
 packages:
   /@discordjs/collection/0.1.5:
     dev: false
@@ -34,12 +34,6 @@ packages:
     dev: false
     resolution:
       integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=
-  /axios/0.19.2:
-    dependencies:
-      follow-redirects: 1.5.10
-    dev: false
-    resolution:
-      integrity: sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
   /better-sqlite3/5.4.3:
     dependencies:
       integer: 2.1.0
@@ -113,12 +107,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
-  /debug/3.1.0:
-    dependencies:
-      ms: 2.0.0
-    dev: false
-    resolution:
-      integrity: sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
   /delayed-stream/1.0.0:
     dev: false
     engines:
@@ -135,35 +123,6 @@ packages:
     dev: false
     resolution:
       integrity: sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
-  /discord-backup/2.1.13:
-    dependencies:
-      axios: 0.19.2
-      discord.js: 12.0.2
-    dev: false
-    resolution:
-      integrity: sha512-KN0hOi3OpXZYEsgJp5t5LjBRgkW+msyMWsBI0LS7yl8cDj0RMP4L+IuiXhgyQxutR3kwwW7aecjnyzGDWBXHKg==
-  /discord.js/12.0.2:
-    dependencies:
-      '@discordjs/collection': 0.1.5
-      abort-controller: 3.0.0
-      form-data: 3.0.0
-      node-fetch: 2.6.0
-      prism-media: 1.2.1
-      setimmediate: 1.0.5
-      tweetnacl: 1.0.3
-      ws: 7.2.3
-    dev: false
-    engines:
-      node: '>=12.0.0'
-    peerDependencies:
-      bufferutil: ^4.0.1
-      erlpack: discordapp/erlpack
-      libsodium-wrappers: ^0.7.6
-      sodium: ^3.0.2
-      utf-8-validate: ^5.0.2
-      zlib-sync: ^0.1.6
-    resolution:
-      integrity: sha512-iZiEA4Y61gqq/EjFfLXnkRK9pLapnax/vTVDUhs/mAhyqozAy0GOlk/MZI9rSa1iIoKTWRq6P9CRKhLNT2wUnA==
   /discord.js/12.1.1:
     dependencies:
       '@discordjs/collection': 0.1.5
@@ -263,14 +222,6 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha512-aAWcW57uxVNrQZqFXjITpW3sIUQmHGG3qSb9mUah9MgMC4NeWhNOlNjXEYq3HjRAvL6arUviZGGJsBg6z0zsWA==
-  /follow-redirects/1.5.10:
-    dependencies:
-      debug: 3.1.0
-    dev: false
-    engines:
-      node: '>=4.0'
-    resolution:
-      integrity: sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
   /form-data/3.0.0:
     dependencies:
       asynckit: 0.4.0
@@ -567,6 +518,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-JvdAWfbXeIGaZ9cILp38HntZSFSo3mWg6xGcJJsd+d4aRMOqauag1C63dJfDw7OaMYwEbHMOxEZ1lqVRYP2OAw==
+  /stack/0.1.0:
+    dev: false
+    engines:
+      '0': node >= 0.2.0
+    resolution:
+      integrity: sha1-6SNZipvlHmF2gsshzxsoGKRJraI=
   /statuses/1.5.0:
     dev: false
     engines:
@@ -641,8 +598,8 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
-  discord-backup: ^2.1.13
   discord.js: ^12.1.1
   express: ^4.17.1
   moment: ^2.24.0
   quick.db: ^7.0.0-b22
+  stack: ^0.1.0

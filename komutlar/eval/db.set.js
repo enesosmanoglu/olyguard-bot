@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const db = require('quick.db');
 const komutAdı = __filename.replace(__dirname,"").replace("/","").replace(".js","")
-const ayarlar = require("/app/ayarlar");
+const ayarlar = require(process.env.path_prefix + "/app/ayarlar");
 
 const anaKomut = komutAdı.split(".")[0];
 const ozellik = komutAdı.split(".")[1];

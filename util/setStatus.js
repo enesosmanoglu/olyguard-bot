@@ -1,47 +1,44 @@
 module.exports = client => {
-  client.guild = client.guilds.cache.find(g => g.id == client.ayarlar.sunucu);
-  client.user.setAvatar("/app/assets/on.png");
+  client.guild = client.guilds.cache.find(g => g.id == client.settings.sunucu);
 
   let olyguards = [];
 
-  setInterval(() => {
-    if (olyguards.length != client.ayarlar.olyguard_ids.length - 1) {
-      client.ayarlar.olyguard_ids.forEach(id => {
-        if (id == client.user.id) return;
+  setTimeout(() => {
+    setInterval(() => {
+      if (olyguards.length != client.settings.olyguard_ids.length - 1) {
+        client.settings.olyguard_ids.forEach(id => {
+          if (id == client.user.id) return;
+          if (!client.guild) return console.error(`[setStatus.js] [ERROR] [GUILD] Ana sunucu bulunamadı. (ayarlar.sunucu = ${client.settings.sunucu})`);
+          let og = client.guild.members.cache.find(m => m.id == id);
+          if (!og) return console.error("[ERROR] [OG_OTHER] Diğer koruma botu bulunamadı. ID: " + id);
+          olyguards.push(og);
+        });
+      }
 
-        if (!client.guild) return console.error("Ana sunucu bulunamadı. Bekleniyor... (ayarlar.sunucu)");
+      let canIwork = true;
+      for (let i = 0; i < olyguards.length; i++) {
+        const og = olyguards[i];
+        let status = og.user.presence.status;
+        if (status == "dnd") canIwork = false;
+      }
 
-        let og = client.guild.members.cache.find(m => m.id == id);
-        if (!og) return console.error("bot kicklenmiş: " + id);
-        olyguards.push(og);
-      });
-    }
+      if (canIwork) {
+        if (client.user.presence.status != "dnd") {
+          client.user.setStatus("dnd")
+          console.log("[STATUS] Aktif!")
+          client.clearInterval(client.changeAvatarInt)
+          client.changeAvatarInt = setInterval(() => client.changeAvatar(), 3000);
+        };
+      } else {
+        if (client.user.presence.status != "idle") {
+          client.user.setStatus("idle")
+          console.log("[STATUS] Beklemede...")
+          client.clearInterval(client.changeAvatarInt)
+          client.changeAvatarInt = setInterval(() => client.changeAvatar(), 3000);
+        };
+      }
 
-    let canIwork = true;
-    for (let i = 0; i < olyguards.length; i++) {
-      const og = olyguards[i];
-      let status = og.user.presence.status;
-      //console.log(i, status);
+    }, ~~(100 + (Math.random() * 2000)));
+  }, ~~(5000 + (Math.random() * 1000)));
 
-      if (status == "dnd") canIwork = false;
-    }
-
-    if (canIwork) {
-      if (client.user.presence.status != "dnd") {
-        client.user.setStatus("dnd")
-        console.log("aktif")
-        client.clearInterval(client.changeAvatarInt)
-        client.changeAvatarInt = setInterval(() => client.changeAvatar(), 3000);
-      };
-    }
-    else {
-      if (client.user.presence.status != "idle") {
-        client.user.setStatus("idle")
-        console.log("beklemede")
-        client.clearInterval(client.changeAvatarInt)
-        client.changeAvatarInt = setInterval(() => client.changeAvatar(), 3000);
-      };
-    }
-
-  }, 1000);
 };

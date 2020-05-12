@@ -1,6 +1,6 @@
 {
   "name": "olyguard-bot",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "ria",
   "main": "bot.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "express": "^4.17.1",
     "moment": "^2.24.0",
     "quick.db": "^7.0.0-b22",
-    "discord-backup": "^2.1.13"
+    "stack": "^0.1.0"
   },
   "engines": {
     "node": "12.16.1"

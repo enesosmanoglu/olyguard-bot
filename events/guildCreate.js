@@ -3,7 +3,7 @@ const db = require("quick.db");
 
 module.exports = guild => {
   const client = guild.client;
-  const ayarlar = client.ayarlar;
+  const ayarlar = client.settings;
 
   if (guild.id == ayarlar.sunucu) {
     client.guild = guild;
